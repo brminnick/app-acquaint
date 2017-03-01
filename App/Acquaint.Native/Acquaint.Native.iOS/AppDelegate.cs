@@ -46,8 +46,6 @@ namespace Acquaint.Native.iOS
 
 			Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
 
-			SQLitePCL.CurrentPlatform.Init();
-
 			// intantiate a new instance of Window with the device's screen bounds
 			Window = new UIWindow(UIScreen.MainScreen.Bounds);
 

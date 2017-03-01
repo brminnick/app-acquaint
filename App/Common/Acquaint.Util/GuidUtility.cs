@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
-using PCLCrypto;
-using static PCLCrypto.WinRTCrypto;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Digests;
 
 namespace Acquaint.Util
 {
@@ -56,13 +55,11 @@ namespace Acquaint.Util
             SwapByteOrder(namespaceBytes);
 
             // compute the hash of the name space ID concatenated with the name (step 4)
-            var algorithmProvider = version == 3 ? HashAlgorithmProvider.OpenAlgorithm(HashAlgorithm.Md5) : HashAlgorithmProvider.OpenAlgorithm(HashAlgorithm.Sha1);
-            var cryptoHash = algorithmProvider.CreateHash();
-
-            cryptoHash.Append(namespaceBytes);
-            cryptoHash.Append(nameBytes);
-
-            var hash = cryptoHash.GetValueAndReset().ToArray();
+            IDigest algorithm = version == 3 ? (IDigest)new MD5Digest() : (IDigest)new Sha1Digest();
+            algorithm.BlockUpdate(namespaceBytes, 0, namespaceBytes.Length);
+            algorithm.BlockUpdate(nameBytes, 0, nameBytes.Length);
+            byte[] hash = new byte[algorithm.GetDigestSize()];
+            algorithm.DoFinal(hash, 0);
 
             // most bytes from the hash are copied straight to the bytes of the new GUID (steps 5-7, 9, 11-12)
             var newGuid = new byte[16];

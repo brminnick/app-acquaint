@@ -43,8 +43,6 @@ namespace Acquaint.XForms.iOS
 
 			Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
 
-			SQLitePCL.CurrentPlatform.Init();
-
             FormsMaps.Init();
 
 			CachedImageRenderer.Init();
